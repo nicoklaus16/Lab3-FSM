@@ -1,4 +1,4 @@
-#include "Vlfsr4.h"
+#include "Vlfsr7.h"
 #include "verilated.h"
 #include "verilated_vcd_c.h"
 #include "vbuddy.cpp"
@@ -9,12 +9,12 @@ int main(int argc, char **argv, char **env) {
 
     Verilated::commandArgs(argc, argv);
     //init top verilog instance
-    Vlfsr4* top = new Vlfsr4;
+    Vlfsr7* top = new Vlfsr7;
     //init trace dump
     Verilated::traceEverOn (true);
     VerilatedVcdC* tfp = new VerilatedVcdC;
     top->trace (tfp, 99);
-    tfp->open ("lfsr4.vcd");
+    tfp->open ("lfsr7.vcd");
 
     // initialize Vbuddy
     if (vbdOpen()!=1) return(-1);
@@ -37,7 +37,8 @@ int main(int argc, char **argv, char **env) {
             top->eval ();
         }
 
-        // Display the 4-bit value on the 7-segment display
+        // Display the 4-bit value on the 7-segment displays
+        vbdHex(2, (top->data_out >> 4) & 0xF);
         vbdHex(1, top->data_out & 0xF);
 
         // Display the 4-bit value on the neopixel strip
