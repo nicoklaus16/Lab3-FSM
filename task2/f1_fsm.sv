@@ -51,6 +51,7 @@ module f1_fsm #(
             S6: data_out = 8'b111111;
             S7: data_out = 8'b1111111;
             S8: data_out = 8'b11111111;
+            default data_out = 8'b0;
         endcase
     end
 
