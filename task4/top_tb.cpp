@@ -9,8 +9,7 @@ int main(int argc, char **argv, char **env) {
     int reactime;
     //flag to exit reactime measuring loop
     int flag = 0;
-    //flag to execute reactime printout only once
-    int flag2 = 0;
+    int flagenter = 0;
 
     Verilated::commandArgs(argc, argv);
     //init top verilog instance
@@ -45,27 +44,29 @@ int main(int argc, char **argv, char **env) {
         // Display the 8-bit value on the neopixel strip
         vbdBar(top->data_out & 0xFF);
 
-        // Start timer and measure elapsed time
-        /*if (top->reacflag)
-        {
-            vbdInitWatch();
-        }
-
-        do {
-            reactime = vbdElapsed();
-            flag = vbdFlag();
-            flag2 = 1;
-        }while (!flag);
-        
-        if (flag2) {
-            printf("%d \n", reactime);
-            flag2 = 0;
-        };*/
-
         vbdCycle(simcyc);
 
         top->rst = (simcyc<2);
         top->trigger = vbdFlag();
+
+        // Start timer and measure elapsed time
+        if (flagenter)
+        {
+            vbdInitWatch();
+            do {
+                reactime = vbdElapsed();
+                if (vbdFlag()) flag =1;
+            }while (!flag);
+            printf("%d \n", reactime);
+            exit(0);
+        }
+
+        //Check whether lights are going off next cycle
+        if (top->reacflag)
+        {
+            flagenter = 1;
+        }
+
         if (Verilated::gotFinish() || vbdGetkey()=='q')  exit(0);
     }
     vbdClose();
