@@ -8,7 +8,7 @@ module top#(
     output logic [WIDTH-1:0]    data_out
 );
 
-    logic [WIDTH-1:0]   f1lfsrout;
+    logic [WIDTH-2:0]   f1lfsrout;
     logic               f1delayout;
     logic               f1clktickout;
     logic               enable;
